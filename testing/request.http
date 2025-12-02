@@ -1,0 +1,60 @@
+### metadata
+GET http://localhost:4004/odata/v4/book-shop/$metadata
+
+###
+GET http://localhost:4004/odata/v4/book-shop/Books
+
+### create
+POST http://localhost:4004/odata/v4/book-shop/Books
+Content-Type: application/json
+
+{
+    "ID": 1,
+    "title": "The Alchemist22",
+    "author": "Paulo Coelho",
+    "price": 299,
+    "stock": 120
+}
+
+### PUT
+PUT http://localhost:4004/odata/v4/book-shop/Books(223)
+Content-Type: application/json
+
+{
+     "ID": 223,
+    "title": "The Alchemist22",
+    "author": "Paulo Coelho",
+    "price": 299,
+    "stock": 122
+}
+
+### PATCH
+PATCH http://localhost:4004/odata/v4/book-shop/Books(223)
+Content-Type: application/json
+
+{
+    "stock" : 126
+}
+
+### DELETE
+DELETE http://localhost:4004/odata/v4/book-shop/Books(223)
+
+
+### count all books
+GET http://localhost:4004/odata/v4/book-shop/Books/$count
+
+### Total stocks
+GET http://localhost:4004/odata/v4/book-shop/Books?$apply=groupby((author),aggregate(stock with sum as totalStock, price with sum as TotalPrice))
+
+### total stock per author
+GET http://localhost:4004/odata/v4/book-shop/Books?$apply=groupby((author),aggregate(stock with sum as stock_author))
+
+### books return per author
+GET http://localhost:4004/odata/v4/book-shop/Books?$apply=groupby((author),aggregate(ID with countdistinct as numberofbooks))
+
+
+### Average price per author
+GET http://localhost:4004/odata/v4/book-shop/Books?$apply=groupby((author), aggregate(price with average as avgPrice))
+
+### Total stock per author
+GET http://localhost:4004/odata/v4/book-shop/Books?$apply=groupby((author), aggregate(stock with sum as totalstock))&$filter=totalstock gt 400

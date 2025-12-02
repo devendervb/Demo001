@@ -1,0 +1,59 @@
+<mvc:View controllerName="project1.controller.View1"
+    xmlns:mvc="sap.ui.core.mvc"
+    xmlns="sap.m">
+    <Page id="page">
+       <content>
+          	<Table id="idProductsTable"
+		inset="false"
+		items="{
+			path: '/Books'
+		}">
+        	<headerToolbar>
+			<OverflowToolbar>
+				<content>
+					<Title text="Products" level="H2"/>
+					<ToolbarSpacer />			
+					<Button text="Create" id="idbtn" press=".onCreate"></Button>                   
+				</content>
+			</OverflowToolbar>
+		</headerToolbar>
+		<columns>
+			<Column id="col1"
+				width="12em">
+				<Text text="ID" id="txt1"/>
+			</Column>
+			<Column id="col2"
+				width="12em">
+				<Text text="Title" id="txt2"/>
+			</Column>
+            <Column id="col3"
+				width="12em">
+				<Text text="Author" id="txt3"/>
+			</Column>
+            <Column id="col4"
+				width="12em">
+				<Text text="Price" id="txt4"/>
+			</Column>
+            <Column id="col5"
+				width="12em">
+				<Text text="Stock" id="txt5"/>
+			</Column>
+		</columns>
+		<items>
+			<ColumnListItem vAlign="Middle">
+				<cells>
+					<Text text="{ID}" />
+                    <Text text="{title}" />
+                    <Text text="{author}" />
+                    <Text text="{price}" />
+                    <Text text="{stock}" />
+					
+					
+				
+				</cells>
+			</ColumnListItem>
+		</items>
+	</Table>
+       </content>
+    </Page>
+</mvc:View>
