@@ -2,8 +2,9 @@ sap.ui.define([
     "sap/ui/core/mvc/Controller",
     "sap/m/MessageToast",
     "sap/ui/core/message/MessageManager",
-    "sap/m/MessageBox"
-], (Controller, MessageToast, MessageManager, MessageBox) => {
+    "sap/m/MessageBox",
+    "sap/ui/model/json/JSONModel"
+], (Controller, MessageToast, MessageManager, MessageBox, JSONModel) => {
     "use strict";
 
     return Controller.extend("project1.controller.View1", {
@@ -12,6 +13,8 @@ sap.ui.define([
             this._oMessageManager = sap.ui.getCore().getMessageManager();
             this._oMessageManager.registerObject(this.getView(), true);
             this.getView().setModel(this._oMessageManager.getMessageModel(), "message");
+
+            //    this.getView().setModel(new JSONModel({ editable: false }), "editmode");
 
         },
         _showLastBackendError: function () {
@@ -22,7 +25,7 @@ sap.ui.define([
             if (this._oMessageManager.getMessageModel().getData()[0].type === 'Error') {
                 MessageBox.error(aMessages);
                 this.onDialogClose();
-             } else {
+            } else {
                 MessageBox.error("Creation failed due to an unknown error.");
             }
 
@@ -81,7 +84,7 @@ sap.ui.define([
             // this.oDialog.close();
         },
         onDialogClose() {
-             this._clearDialogInputs(); 
+            this._clearDialogInputs();
             this.oDialog.close();
         },
         _clearDialogInputs() {
@@ -92,7 +95,66 @@ sap.ui.define([
             oView.byId("formPrice").setValue("");
             oView.byId("formStock").setValue("");
 
-        
+
+        },
+        onUpdate(oEvent) {
+            debugger;
+            //let cellList = oEvent.getSource().getParent().getCells();
+            // for (let index = 0; index < cellList.length; index++) {
+            // cellList[index].setEditable(true);
+            // }
+            //for (const cell of cellList) {
+            // cell.setEditable(true);
+            // }
+            //cellList.forEach(cell => cell.setEditable(true));
+            oEvent.getSource().getParent().getCells().forEach((cell, index) => {
+                if (index !== 1) {
+                    cell.setEditable?.(true)
+                }
+
+            });
+
+        },
+        onEditRow(oEvent) {
+            // got each cell will 
+            oEvent.getSource().getParent().getParent().getCells().forEach((cell, index) => {
+                if (index !== 0)
+                    cell.setEditable?.(true)
+            });
+
+            oEvent.getSource().getParent().getItems().forEach(item => item.setVisible(!item.getVisible()))
+        },
+        onSaveRow(oEvent) {
+
+            this.getView().getModel().submitBatch('$auto').then(function () {
+                MessageToast.show("Book Updated");
+
+            }).catch(error => {
+                MessageBox.error(error.message);
+            })
+
+            oEvent.getSource().getParent().getItems().forEach(item => item.setVisible(!item.getVisible()));
+        },
+        onDeleteRow (oEvent){
+            const oCtx = oEvent.getSource().getBindingContext();
+            const oModel = oCtx.getModel();
+            const oRowObj = oCtx.getObject();
+
+            MessageBox.confirm(
+                `Delete Book ${oRowObj.title} (ID: ${oRowObj.ID})?`,
+                {
+                    actions : [sap.m.MessageBox.Action.OK, sap.m.MessageBox.Action.CANCEL],
+                    onClose : function (sAction){
+                        if(sAction === sap.m.MessageBox.Action.OK){
+                            oCtx.delete("$auto").then(function(){
+                                MessageToast.show("Book Deleted");
+                            }).catch(function(oError){
+                                MessageBox.error("Deletion Failed"+oError.message);
+                            })
+                        }
+                    }
+                }
+            )
         }
     });
 });

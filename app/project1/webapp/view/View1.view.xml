@@ -1,4 +1,4 @@
-<mvc:View controllerName="project1.controller.View1"
+<mvc:View xmlns:core="sap.ui.core" controllerName="project1.controller.View1"
     xmlns:mvc="sap.ui.core.mvc"
     xmlns="sap.m">
     <Page id="page">
@@ -7,13 +7,14 @@
 		inset="false"
 		items="{
 			path: '/Books'
-		}">
+		}" selectionChange=".onTableChange">
         	<headerToolbar>
 			<OverflowToolbar>
 				<content>
 					<Title text="Products" level="H2"/>
 					<ToolbarSpacer />			
-					<Button text="Create" id="idbtn" press=".onCreate"></Button>                   
+					<Button text="Create" id="idbtn" press=".onCreate"></Button>  
+					<Button text="Update" id="idupd" press=".onUpdate"></Button>                   
 				</content>
 			</OverflowToolbar>
 		</headerToolbar>
@@ -38,17 +39,38 @@
 				width="12em">
 				<Text text="Stock" id="txt5"/>
 			</Column>
+			<Column id="col6"
+				width="12em">
+				<Text text="Action" id="txt6"/>
+			</Column>
 		</columns>
 		<items>
 			<ColumnListItem vAlign="Middle">
 				<cells>
-					<Text text="{ID}" />
-                    <Text text="{title}" />
-                    <Text text="{author}" />
-                    <Text text="{price}" />
-                    <Text text="{stock}" />
-					
-					
+					<Input value="{ID}" editable="false"/>
+                    <Input value="{title}" editable="false"/>
+                    <Input value="{author}" editable="false"/>
+                    <Input value="{price}" editable="false"/>
+                    <Input value="{stock}" editable="false"/>
+				<HBox>
+					<Button icon="sap-icon://edit"
+						type="Transparent"
+						visible="true"
+						press=".onEditRow" />
+					<Button icon="sap-icon://delete"
+						type="Transparent"
+						visible="true"
+						press=".onDeleteRow" />	
+
+					<Button icon="sap-icon://save"
+							type="Transparent"
+							visible="false"
+							press=".onSaveRow" />
+					<Button icon="sap-icon://cancel"
+							type="Transparent"
+							visible="false"
+							press=".onSaveRow" />		
+				</HBox>	
 				
 				</cells>
 			</ColumnListItem>
